@@ -121,7 +121,7 @@ document.getElementById("search-btn").addEventListener("click", () => {
   const input = document.getElementById("input-text");
   const searchValue = input.value.trim().toLowerCase();
   if (searchValue == "") {
-    alert("please type a word");
+    return alert("please type a word");
   }
 
   const url = "https://openapi.programming-hero.com/api/words/all";

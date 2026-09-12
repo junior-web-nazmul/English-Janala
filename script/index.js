@@ -9,6 +9,15 @@ const createElement = (synonyms) => {
   );
   return htmlElement.join(" ");
 };
+const manageSpinner = (status, spinnerId, containerId) => {
+  if (status == true) {
+    document.getElementById(spinnerId).classList.remove("hidden");
+    document.getElementById(containerId).classList.add("hidden");
+  } else {
+    document.getElementById(spinnerId).classList.add("hidden");
+    document.getElementById(containerId).classList.remove("hidden");
+  }
+};
 const loadLesson = async () => {
   const url = "https://openapi.programming-hero.com/api/levels/all";
   const res = await fetch(url);
@@ -28,6 +37,7 @@ const displayLesson = (lessons) => {
 };
 
 const loadWords = async (id) => {
+  manageSpinner(true, "loading-spinner", "word-container");
   const url = `https://openapi.programming-hero.com/api/level/${id}`;
   const res = await fetch(url);
   const data = await res.json();
@@ -46,9 +56,12 @@ const displayWords = (words) => {
             <h3 class="text-2xl font-bold">একটি Lesson Select করুন।</h3>
         </div>
       `;
+    manageSpinner(false, "loading-spinner", "word-container");
+    return;
   }
   words.forEach((word) => {
     const cardDiv = document.createElement("div");
+    // kisu speak korar jonno oita jodi str hoi tahole ''single qutation ar majkhane likte hobe
 
     cardDiv.innerHTML = `
     
@@ -60,7 +73,7 @@ const displayWords = (words) => {
                        <button onclick="loadWordDetails(${word.id})" class=" btn p-3 rounded-sm hover:bg-[#1A91FF30]"> 
                          <i class="fa-solid fa-circle-info"></i>
                        </button>
-                       <button class=" btn p-3 rounded-sm hover:bg-[#1A91FF30]">
+                       <button onclick="pronounceWord('${word.word}')" class=" btn p-3 rounded-sm hover:bg-[#1A91FF30]">
                           <i class="fa-solid fa-volume"></i>
                         </button>
                        
@@ -69,10 +82,12 @@ const displayWords = (words) => {
             
     `;
     wordContainer.append(cardDiv);
+    manageSpinner(false, "loading-spinner", "word-container");
   });
 };
 
 const loadWordDetails = async (id) => {
+  manageSpinner(true, "loading-spinner-modal", "words-details");
   document.getElementById("my_modal").showModal();
   const url = `https://openapi.programming-hero.com/api/word/${id}`;
   const res = await fetch(url);
@@ -98,5 +113,31 @@ const displayWordDetails = (word) => {
                 </div>
             </div>
   `;
+  manageSpinner(false, "loading-spinner-modal", "words-details");
 };
 loadLesson();
+
+document.getElementById("search-btn").addEventListener("click", () => {
+  const input = document.getElementById("input-text");
+  const searchValue = input.value.trim().toLowerCase();
+  if (searchValue == "") {
+    alert("please type a word");
+  }
+
+  const url = "https://openapi.programming-hero.com/api/words/all";
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      const alldata = data.data;
+      const filterData = alldata.filter((word) =>
+        word.word.toLowerCase().includes(searchValue),
+      );
+      displayWords(filterData);
+    });
+});
+
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}

@@ -108,6 +108,22 @@
 
         </div>
     </section>
+    <!-- loading spinner for level words -->
+    <section id="loading-spinner" class="text-center text-4xl hidden">
+        <!-- <span class="loading loading-infinity loading-xl"></span> -->
+        <span class="loading loading-bars loading-xl"></span>
+    </section>
+    <!-- search container -->
+    <section class="flex justify-center my-5">
+        <div class="join">
+            <div>
+                <label class="input validator outline-none join-item">
+                    <input id="input-text" type="text" placeholder="Search vocabularys" required />
+                </label>
+            </div>
+            <button id="search-btn" class="btn btn-primary  join-item">Search</button>
+        </div>
+    </section>
     <!-- api vocabulary section  -->
     <section class="w-11/12 mx-auto bg-gray-200 p-5">
         <div id="word-container" class="grid grid-cols-3 gap-4">
@@ -120,7 +136,16 @@
     <!-- Open the modal using ID.showModal() method -->
     <!-- <button class="btn" onclick="my_modal.showModal()">open modal</button> -->
     <dialog id="my_modal" class="modal modal-bottom sm:modal-middle">
-        <div id="words-details" class="modal-box">
+        <div class="modal-box">
+            <!-- loading spinner for modal -->
+            <div id="loading-spinner-modal" class="text-center text-4xl ">
+                <!-- <span class="loading loading-infinity loading-xl"></span> -->
+                <span class="loading loading-bars loading-xl"></span>
+            </div>
+            <!-- details -->
+            <div id="words-details">
+
+            </div>
 
         </div>
     </dialog>

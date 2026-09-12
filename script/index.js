@@ -120,6 +120,7 @@ loadLesson();
 document.getElementById("search-btn").addEventListener("click", () => {
   const input = document.getElementById("input-text");
   const searchValue = input.value.trim().toLowerCase();
+  removeActive();
   if (searchValue == "") {
     return alert("please type a word");
   }
